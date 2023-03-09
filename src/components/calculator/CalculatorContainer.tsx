@@ -1,271 +1,252 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable consistent-return */
-/* eslint-disable no-param-reassign */
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { Calculator } from './CalculatorView';
+import { mathOperations, buttonsLibrary, keyMapper } from './dataHelper';
+import { IButton, IButtonBraket, IButtonNumber, IButtonOperation } from './interfaces';
 
-import { useCallback, useLayoutEffect, useState } from 'react';
-import { buttonsLibrary, Calculator } from './CalculatorView';
-
-interface IMathOperations {
-  [key: string]: (val1: number, val2: number) => number;
-  '\u221A': (val1: number) => number;
-}
-
-const mathOperations: IMathOperations = {
-  '+': (val1, val2) => val1 + val2,
-  '-': (val1, val2) => val1 - val2,
-  '*': (val1, val2) => val1 * val2,
-  '/': (val1, val2) => val1 / val2,
-  '\u221A': (val1) => Math.sqrt(val1),
-  '%': (val1, val2) => (val1 * val2) / 100,
-};
+const EXPRESSION_SYMBOL_LIMIT = 25;
 
 export const CalculatorContainer = () => {
-  const [maxDepth, setMaxDepth] = useState(0);
-  const [inputValue, setInputValue] = useState('');
-  const [lastBraket, setLastBraket] = useState('');
-  const [openBraketsCount, setOpenBraketsCount] = useState(0);
-  const [closeBraketCount, setCloseBraketCount] = useState(0);
+  const [result, setResult] = useState('');
+  const [lastButton, setLastButton] = useState<IButton>();
   const [lastNumber, setLastNumber] = useState<string>('');
-  const [result, setResult] = useState<string | undefined>();
+  const [outputValue, setOutputValue] = useState<string>('');
+  const [activeButton, setActiveButton] = useState('');
   const [expression, setExpression] = useState<
-    Array<{ value: string; type: 'number' | 'operation' | 'syntx'; priority?: number }>
+    Array<IButtonNumber | IButtonOperation | IButtonBraket>
   >([]);
-  const [lastVal, setLastVal] = useState<string | undefined>();
+
+  const errorHandler = (msg: string) => {
+    setResult(msg);
+    setLastButton(undefined);
+    setExpression([]);
+    setOutputValue('');
+  };
+
+  const extractValue = (e: React.MouseEvent) => {
+    const tag = (e.target as HTMLElement).tagName;
+    if (tag === 'BUTTON') {
+      const element = e.target as HTMLButtonElement;
+
+      return element.querySelector('span')?.innerText;
+    }
+    if (tag === 'SPAN') {
+      const element = e.target as HTMLParagraphElement;
+      return element.innerText;
+    }
+    return '';
+  };
+
+  const combineNumber = (value: string) => {
+    setLastNumber((prev) => `${prev}${value}`);
+  };
 
   const clearAll = () => {
-    setInputValue('');
+    setLastButton(undefined);
     setLastNumber('');
+    setOutputValue('');
     setExpression([]);
-    setMaxDepth(0);
-    setCloseBraketCount(0);
-    setOpenBraketsCount(0);
-    setLastBraket('');
-    setResult(undefined);
+    setResult('');
   };
 
-  const addNumber = (newNumber: string) => {
-    if (lastNumber) {
-      setLastNumber((prev) => `${prev}${newNumber}`);
-      setInputValue((prev) => `${prev}${newNumber}`);
+  const checkPriority = (
+    currentEl: IButtonOperation,
+    stack: Array<IButtonOperation | IButtonBraket>,
+  ) => {
+    const lastOperation = stack[stack.length - 1];
+    if (lastOperation) {
+      return currentEl.priority < (lastOperation as IButtonOperation).priority;
+    }
+    return false;
+  };
+
+  const mathOperationCalculate = (operation: IButtonOperation, numbersStack: number[]) => {
+    const lastIndx = numbersStack.length - 1;
+    if (operation.value === '\u221A') {
+      const mathResult = mathOperations[operation.value](numbersStack[lastIndx]);
+      numbersStack.splice(lastIndx, 1, mathResult);
+      return numbersStack;
+    }
+    const mathResult = mathOperations[operation.value](
+      numbersStack[lastIndx - 1],
+      numbersStack[lastIndx],
+    );
+    numbersStack.splice(numbersStack.length - 2, 2, mathResult);
+    return numbersStack;
+  };
+
+  const calculateResult = useCallback(
+    (expressionArr: Array<IButtonNumber | IButtonOperation | IButtonBraket>) => {
+      let numbersStack: number[] = [];
+      const operationsStack: Array<IButtonOperation | IButtonBraket> = [];
+      for (let i = 0; i < expressionArr.length; i += 1) {
+        const currentSymbol = expressionArr[i];
+        if (currentSymbol.type === 'number') {
+          numbersStack.push(parseFloat(currentSymbol.value));
+        } else if (currentSymbol.type === 'operation') {
+          const isNeedCalculate = checkPriority(currentSymbol, operationsStack);
+          if (isNeedCalculate) {
+            while (
+              Object.hasOwn(operationsStack[operationsStack.length - 1], 'priority') &&
+              (operationsStack[operationsStack.length - 1] as IButtonOperation).priority >=
+                currentSymbol.priority
+            ) {
+              const lastOperation = operationsStack.pop() as IButtonOperation;
+              numbersStack = mathOperationCalculate(lastOperation, numbersStack);
+            }
+          }
+          operationsStack.push(currentSymbol);
+        } else if (currentSymbol.type === 'braket') {
+          if (currentSymbol.value === '(') {
+            operationsStack.push(currentSymbol);
+          } else {
+            while (operationsStack[operationsStack.length - 1].value !== '(') {
+              const lastOperation = operationsStack.pop() as IButtonOperation;
+              numbersStack = mathOperationCalculate(lastOperation, numbersStack);
+            }
+            operationsStack.splice(operationsStack.length - 1, 1);
+          }
+        }
+      }
+      if (operationsStack.length) {
+        while (operationsStack.length) {
+          const lastOperation = operationsStack.pop() as IButtonOperation;
+          numbersStack = mathOperationCalculate(lastOperation, numbersStack);
+        }
+      }
+      const isFinish = numbersStack.length === 1 && !operationsStack.length;
+      if (isFinish) {
+        return numbersStack[0];
+      }
+      throw new Error('Exit with error');
+    },
+    [],
+  );
+
+  const expressionConstructor = (value: string) => {
+    if (expression.length >= EXPRESSION_SYMBOL_LIMIT) {
+      errorHandler('LIMIT EXCEEDED');
       return;
     }
-    setLastNumber(newNumber);
-    setInputValue((prev) => `${prev}${newNumber}`);
-  };
-
-  const mathDepth = (
-    expressionArray: Array<{
-      value: string;
-      priority?: number;
-      type: 'number' | 'operation' | 'syntx';
-    }>,
-    depth: number,
-  ) => {
-    for (let i = depth; i >= 1; i -= 1) {
-      for (let j = 0; j <= expressionArray.length; j += 1) {
-        const currentEl = expressionArray[j];
-        if (!currentEl) {
-          break;
-        }
-        if (expressionArray.length === 1) {
-          return expressionArray[0].value;
-        }
-        if (currentEl.type === 'syntx' && currentEl.value === '(') {
-          const nestedArray = expressionArray.slice(j);
-          const closeBraketIndx = nestedArray.findIndex(
-            (el) => el.value === ')' && el.priority === currentEl.priority,
-          );
-          const nestedExpression = nestedArray.slice(1, closeBraketIndx);
-          const mathResult = parseFloat(mathDepth(nestedExpression, depth - 1));
-          expressionArray.splice(j, nestedExpression.length, {
-            value: mathResult.toString(),
-            type: 'number',
-          });
-          j = 0;
-        } else if (currentEl.type === 'operation' && currentEl.value === '-' && j === 0) {
-          const nextNum = parseFloat(expressionArray[j + 1].value);
-          const mathResult = -nextNum;
-          expressionArray.splice(j, 2, { value: mathResult.toString(), type: 'number' });
-          j = 0;
-        } else if (currentEl.type === 'operation' && currentEl.value === '\u221A') {
-          const nextNum = parseFloat(expressionArray[j + 1].value);
-          const mathResult = mathOperations[currentEl.value](nextNum);
-          expressionArray.splice(j, 2, { value: mathResult.toString(), type: 'number' });
-          j = 0;
-        } else if (currentEl.type === 'operation' && currentEl.priority === i) {
-          const prevNum = parseFloat(expressionArray[j - 1].value);
-          const nextNum = parseFloat(expressionArray[j + 1].value);
-          const mathResult = mathOperations[currentEl.value](prevNum, nextNum);
-          expressionArray.splice(j - 1, 3, { value: mathResult.toString(), type: 'number' });
-          j = 0;
-        }
-      }
+    const [button] = (buttonsLibrary as IButton[]).filter((btn) => btn.value === value);
+    if (button.type === 'number' || button.type === 'devider') {
+      if (lastButton && lastButton.type === 'devider' && button.type === 'devider') return;
+      combineNumber(button.value);
+      setOutputValue((prev) => `${prev}${button.value}`);
+      setLastButton(button);
+      return;
     }
-    return expressionArray[0].value;
-  };
-
-  const getReuslt = useCallback(() => {
-    const resultCalc = mathDepth(expression, maxDepth);
-    if (resultCalc) {
-      setResult(resultCalc);
-      setInputValue(resultCalc);
-      setLastNumber(resultCalc);
-    }
-    setMaxDepth(0);
-    setCloseBraketCount(0);
-    setOpenBraketsCount(0);
-    setLastBraket('');
-  }, [expression, maxDepth]);
-
-  useLayoutEffect(() => {
-    if (lastVal && lastVal === '=') {
-      getReuslt();
-    }
-  }, [lastVal, getReuslt]);
-
-  const expressionConstructor = (value?: string) => {
-    const [button] = buttonsLibrary.filter((btn) => btn.value === value);
-
-    if (button.type === 'operation') {
-      if (lastVal && Object.keys(mathOperations).includes(lastVal)) return;
-      if (!lastNumber && button.value !== '\u221A' && button.value !== '-') return;
-      if (button.value === '=') {
-        if (lastNumber) {
-          setExpression((prev) => [...prev, { value: lastNumber, type: 'number' }]);
-        }
+    if ((button.type === 'operation' && button.priority) || button.type === 'braket') {
+      if (
+        !lastButton &&
+        button.value !== '\u221A' &&
+        button.value !== '-' &&
+        button.type !== 'braket'
+      )
         return;
-      }
-      if (button.priority && maxDepth < button.priority) {
-        setMaxDepth(button.priority);
-      }
+      if (lastButton?.type === 'operation' && button.value !== '\u221A' && button.type !== 'braket')
+        return;
+      setLastButton(button);
       if (lastNumber) {
         setExpression((prev) => [
           ...prev,
           { value: lastNumber, type: 'number' },
-          { value: button.value, type: 'operation', priority: button.priority },
+          ...(button.type === 'operation'
+            ? [
+                {
+                  value: button.value,
+                  type: 'operation',
+                  priority: button.priority,
+                } as IButtonOperation,
+              ]
+            : [{ value: button.value, type: 'braket' } as IButtonBraket]),
         ]);
-        setInputValue((prev) => `${prev}${button.value}`);
+        setOutputValue((prev) => `${prev}${button.value}`);
         setLastNumber('');
         return;
       }
       setExpression((prev) => [
         ...prev,
-        { value: button.value, type: 'operation', priority: button.priority },
+        ...(button.type === 'operation'
+          ? [
+              {
+                value: button.value,
+                type: button.type,
+                priority: button?.priority,
+              } as IButtonOperation,
+            ]
+          : [{ value: button.value, type: button.type } as IButtonBraket]),
       ]);
-      setInputValue((prev) => `${prev}${button.value}`);
+      setOutputValue((prev) => `${prev}${button.value}`);
+      setLastNumber('');
+    }
+    if (lastButton && button.type === 'exec') {
+      if (lastNumber) {
+        setExpression((prev) => [...prev, { value: lastNumber, type: 'number' }]);
+      }
+      setLastButton(button);
       return;
-    }
-    if (button.type === 'number') {
-      if (button.value === '.' && lastVal === '.') {
-        return;
-      }
-      addNumber(button.value);
-    }
-    if (button.type === 'syntx' && button.priority) {
-      let bracketPriority: number;
-      if (lastBraket === '(' && button.value === '(') {
-        bracketPriority = maxDepth + 1;
-        setMaxDepth(bracketPriority);
-        setExpression((prev) => [
-          ...prev,
-          { value: button.value, type: 'syntx', priority: bracketPriority },
-        ]);
-        setInputValue((prev) => `${prev}${button.value}`);
-        setLastBraket(button.value);
-        setOpenBraketsCount((prev) => prev + 1);
-      } else if (!lastBraket && button.value === '(') {
-        bracketPriority = button.priority;
-        setMaxDepth(bracketPriority);
-        if (lastNumber) {
-          setExpression((prev) => [
-            ...prev,
-            { value: lastNumber, type: 'number' },
-            { value: button.value, type: 'syntx', priority: bracketPriority },
-          ]);
-          setLastNumber('');
-        } else {
-          setExpression((prev) => [
-            ...prev,
-            { value: button.value, type: 'syntx', priority: bracketPriority },
-          ]);
-        }
-        setInputValue((prev) => `${prev}${button.value}`);
-        setLastBraket(button.value);
-        setOpenBraketsCount((prev) => prev + 1);
-      } else if (lastBraket === '(' && button.value === ')') {
-        if (lastNumber) {
-          setExpression((prev) => [
-            ...prev,
-            { value: lastNumber, type: 'number' },
-            { value: button.value, type: 'syntx', priority: maxDepth },
-          ]);
-          setLastNumber('');
-        } else {
-          setExpression((prev) => [
-            ...prev,
-            { value: button.value, type: 'syntx', priority: bracketPriority },
-          ]);
-        }
-        setInputValue((prev) => `${prev}${button.value}`);
-        setLastBraket(button.value);
-        setCloseBraketCount((prev) => prev + 1);
-      } else if (
-        lastBraket === ')' &&
-        button.value === ')' &&
-        closeBraketCount < openBraketsCount
-      ) {
-        if (lastNumber) {
-          setExpression((prev) => [
-            ...prev,
-            { value: lastNumber, type: 'number' },
-            { value: button.value, type: 'syntx', priority: maxDepth - closeBraketCount },
-          ]);
-          setLastNumber('');
-        } else {
-          setExpression((prev) => [
-            ...prev,
-            { value: button.value, type: 'syntx', priority: bracketPriority },
-          ]);
-        }
-        setInputValue((prev) => `${prev}${button.value}`);
-        setLastBraket(button.value);
-        setCloseBraketCount((prev) => prev + 1);
-      } else {
-        throw new Error('Syntax ERROR');
-      }
     }
     if (button.type === 'clear') {
       clearAll();
     }
   };
 
-  const extractValue = (e: React.MouseEvent) => {
-    const tag = (e.target as HTMLElement).tagName;
-    if (tag === 'DIV') {
-      const element = e.target as HTMLButtonElement;
-      return element.querySelector('p')?.innerText;
+  const handleKeyPress = (e: KeyboardEvent) => {
+    if (e.type === 'keydown') {
+      const calcKey = keyMapper[e.key];
+      if (!calcKey) return;
+      setActiveButton(calcKey);
     }
-    if (tag === 'P') {
-      const element = e.target as HTMLParagraphElement;
-      return element.innerText;
+    if (e.type === 'keyup') {
+      setActiveButton('');
     }
-    return undefined;
   };
+
+  useEffect(() => {
+    if (activeButton) {
+      expressionConstructor(activeButton);
+    }
+  }, [activeButton]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyPress, true);
+    document.addEventListener('keyup', handleKeyPress, true);
+  }, []);
+
+  useLayoutEffect(() => {
+    const getResults = () => {
+      try {
+        const mathResult = calculateResult(expression);
+        if (mathResult) {
+          setResult(mathResult.toString());
+          setOutputValue(mathResult.toString());
+          setLastNumber(mathResult.toString());
+        }
+        setLastButton(undefined);
+        setExpression([]);
+      } catch (err) {
+        errorHandler('Syntax Error');
+      }
+    };
+
+    if (lastButton?.type === 'exec') {
+      getResults();
+    }
+  }, [lastButton, calculateResult, expression]);
 
   const handleClick = (e: React.MouseEvent) => {
     const value = extractValue(e);
-    setLastVal(value);
+    if (!value) return;
     expressionConstructor(value);
   };
 
-  const handleKeyPress = () => {};
-
   return (
     <Calculator
-      calcValue={inputValue}
+      calcValue={outputValue}
       result={result}
       handleClick={handleClick}
-      handleKeyPress={handleKeyPress}
+      activeButton={activeButton}
     />
   );
 };
