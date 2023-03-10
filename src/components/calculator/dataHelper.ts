@@ -52,6 +52,7 @@ export const keyMapper: Record<string, string> = {
   '*': '*',
   '/': '/',
   '%': '%',
+  Escape: 'C',
   Clear: 'C',
   Backspace: 'C',
   '^': '\u221A',

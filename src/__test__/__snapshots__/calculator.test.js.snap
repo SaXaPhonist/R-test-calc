@@ -1,0 +1,532 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Calculator component Calculator match snapshot 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <main
+        class="calculator-wrapper"
+        data-id="calculator-wrapper"
+      >
+        <div
+          class="calculator"
+        >
+          <div
+            class="display"
+          >
+            <section
+              class="calculator__presentation-box"
+              data-testid="calculator-answer"
+            />
+            <section
+              class="calculator__input-container"
+            />
+          </div>
+          <section
+            class="calculator__buttons-container"
+          >
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-C"
+              id="calculator-button-C"
+              type="button"
+            >
+              <span>
+                C
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-√"
+              id="calculator-button-√"
+              type="button"
+            >
+              <span>
+                √
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-%"
+              id="calculator-button-%"
+              type="button"
+            >
+              <span>
+                %
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-/"
+              id="calculator-button-/"
+              type="button"
+            >
+              <span>
+                /
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-1"
+              id="calculator-button-1"
+              type="button"
+            >
+              <span>
+                1
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-2"
+              id="calculator-button-2"
+              type="button"
+            >
+              <span>
+                2
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-3"
+              id="calculator-button-3"
+              type="button"
+            >
+              <span>
+                3
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-*"
+              id="calculator-button-*"
+              type="button"
+            >
+              <span>
+                *
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-4"
+              id="calculator-button-4"
+              type="button"
+            >
+              <span>
+                4
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-5"
+              id="calculator-button-5"
+              type="button"
+            >
+              <span>
+                5
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-6"
+              id="calculator-button-6"
+              type="button"
+            >
+              <span>
+                6
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button--"
+              id="calculator-button--"
+              type="button"
+            >
+              <span>
+                -
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-7"
+              id="calculator-button-7"
+              type="button"
+            >
+              <span>
+                7
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-8"
+              id="calculator-button-8"
+              type="button"
+            >
+              <span>
+                8
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-9"
+              id="calculator-button-9"
+              type="button"
+            >
+              <span>
+                9
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-+"
+              id="calculator-button-+"
+              type="button"
+            >
+              <span>
+                +
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-("
+              id="calculator-button-("
+              type="button"
+            >
+              <span>
+                (
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-)"
+              id="calculator-button-)"
+              type="button"
+            >
+              <span>
+                )
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-0"
+              id="calculator-button-0"
+              type="button"
+            >
+              <span>
+                0
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-."
+              id="calculator-button-."
+              type="button"
+            >
+              <span>
+                .
+              </span>
+            </button>
+            <button
+              class="calculator__button"
+              data-testid="calculator-button-="
+              id="calculator-button-="
+              type="button"
+            >
+              <span>
+                =
+              </span>
+            </button>
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>,
+  "container": <div>
+    <main
+      class="calculator-wrapper"
+      data-id="calculator-wrapper"
+    >
+      <div
+        class="calculator"
+      >
+        <div
+          class="display"
+        >
+          <section
+            class="calculator__presentation-box"
+            data-testid="calculator-answer"
+          />
+          <section
+            class="calculator__input-container"
+          />
+        </div>
+        <section
+          class="calculator__buttons-container"
+        >
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-C"
+            id="calculator-button-C"
+            type="button"
+          >
+            <span>
+              C
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-√"
+            id="calculator-button-√"
+            type="button"
+          >
+            <span>
+              √
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-%"
+            id="calculator-button-%"
+            type="button"
+          >
+            <span>
+              %
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-/"
+            id="calculator-button-/"
+            type="button"
+          >
+            <span>
+              /
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-1"
+            id="calculator-button-1"
+            type="button"
+          >
+            <span>
+              1
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-2"
+            id="calculator-button-2"
+            type="button"
+          >
+            <span>
+              2
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-3"
+            id="calculator-button-3"
+            type="button"
+          >
+            <span>
+              3
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-*"
+            id="calculator-button-*"
+            type="button"
+          >
+            <span>
+              *
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-4"
+            id="calculator-button-4"
+            type="button"
+          >
+            <span>
+              4
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-5"
+            id="calculator-button-5"
+            type="button"
+          >
+            <span>
+              5
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-6"
+            id="calculator-button-6"
+            type="button"
+          >
+            <span>
+              6
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button--"
+            id="calculator-button--"
+            type="button"
+          >
+            <span>
+              -
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-7"
+            id="calculator-button-7"
+            type="button"
+          >
+            <span>
+              7
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-8"
+            id="calculator-button-8"
+            type="button"
+          >
+            <span>
+              8
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-9"
+            id="calculator-button-9"
+            type="button"
+          >
+            <span>
+              9
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-+"
+            id="calculator-button-+"
+            type="button"
+          >
+            <span>
+              +
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-("
+            id="calculator-button-("
+            type="button"
+          >
+            <span>
+              (
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-)"
+            id="calculator-button-)"
+            type="button"
+          >
+            <span>
+              )
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-0"
+            id="calculator-button-0"
+            type="button"
+          >
+            <span>
+              0
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-."
+            id="calculator-button-."
+            type="button"
+          >
+            <span>
+              .
+            </span>
+          </button>
+          <button
+            class="calculator__button"
+            data-testid="calculator-button-="
+            id="calculator-button-="
+            type="button"
+          >
+            <span>
+              =
+            </span>
+          </button>
+        </section>
+      </div>
+    </main>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

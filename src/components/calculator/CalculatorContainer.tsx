@@ -28,7 +28,7 @@ export const CalculatorContainer = () => {
     if (tag === 'BUTTON') {
       const element = e.target as HTMLButtonElement;
 
-      return element.querySelector('span')?.innerText;
+      return element.querySelector('span')?.innerHTML;
     }
     if (tag === 'SPAN') {
       const element = e.target as HTMLParagraphElement;
@@ -87,6 +87,7 @@ export const CalculatorContainer = () => {
           const isNeedCalculate = checkPriority(currentSymbol, operationsStack);
           if (isNeedCalculate) {
             while (
+              operationsStack[operationsStack.length - 1] &&
               Object.hasOwn(operationsStack[operationsStack.length - 1], 'priority') &&
               (operationsStack[operationsStack.length - 1] as IButtonOperation).priority >=
                 currentSymbol.priority
@@ -185,6 +186,7 @@ export const CalculatorContainer = () => {
         setExpression((prev) => [...prev, { value: lastNumber, type: 'number' }]);
       }
       setLastButton(button);
+      setLastNumber('');
       return;
     }
     if (button.type === 'clear') {
@@ -226,6 +228,7 @@ export const CalculatorContainer = () => {
         setLastButton(undefined);
         setExpression([]);
       } catch (err) {
+        console.error(err);
         errorHandler('Syntax Error');
       }
     };
