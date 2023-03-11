@@ -1,6 +1,6 @@
 # App review
 App developed with Webpack, React and TypeScript
- - Start dev app: `npm run dev`
+ - Start dev app: `npm run start`
  - Build: `npm run build`
  - Run tests: `npm run test`
  - Run lint and fix: `npm run lint` || `npm run lint-fix`
