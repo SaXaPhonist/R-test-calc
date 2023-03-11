@@ -11,7 +11,7 @@ export interface IMathOperations {
 
 export interface IButton {
   value: string;
-  type: 'number' | 'operation' | 'exec' | 'braket' | 'devider' | 'clear';
+  type: 'number' | 'operation' | 'exec' | 'braket' | 'divider' | 'clear';
   priority?: number;
 }
 
