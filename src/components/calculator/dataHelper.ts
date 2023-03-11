@@ -20,7 +20,7 @@ export const buttonsLibrary = [
   { value: '(', type: 'braket' },
   { value: ')', type: 'braket' },
   { value: '0', type: 'number' },
-  { value: '.', type: 'devider' },
+  { value: '.', type: 'divider' },
   { value: '=', type: 'exec' },
 ];
 
@@ -54,7 +54,6 @@ export const keyMapper: Record<string, string> = {
   '%': '%',
   Escape: 'C',
   Clear: 'C',
-  Backspace: 'C',
   '^': '\u221A',
   '(': '(',
   ')': ')',

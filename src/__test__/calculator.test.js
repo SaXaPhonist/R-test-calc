@@ -50,7 +50,6 @@ describe('Calculator component', () => {
     await waitFor(() => expect(answerBox.textContent).toBe('2'));
   });
 
-
   it('* operation', async () => {
     const user = userEvent.setup();
     const button1 = container.getByTestId('calculator-button-5');
@@ -118,7 +117,7 @@ describe('Calculator component', () => {
     const answerBox = await container.findByTestId('calculator-answer');
     await waitFor(() => expect(answerBox.textContent).toBe('8'));
   });
-  
+
   it('clear all operation', async () => {
     const user = userEvent.setup();
     const button6 = container.getByTestId('calculator-button-6');
@@ -128,7 +127,7 @@ describe('Calculator component', () => {
     user.click(button6);
     user.click(opeartionBtn);
     user.click(button4);
-    user.click(buttonClear)
+    user.click(buttonClear);
     const answerBox = await container.findByTestId('calculator-answer');
     await waitFor(() => expect(answerBox.textContent).toBe(''));
   });
@@ -138,15 +137,15 @@ describe('Calculator component', () => {
     const button6 = container.getByTestId('calculator-button-6');
     const button4 = container.getByTestId('calculator-button-4');
     const button0 = container.getByTestId('calculator-button-0');
-    const devider = container.getByTestId('calculator-button-.')
+    const divider = container.getByTestId('calculator-button-.');
     const buttonExec = container.getByTestId('calculator-button-=');
     const opeartionBtn = container.getByTestId('calculator-button-+');
     user.click(button0);
-    user.click(devider);
+    user.click(divider);
     user.click(button6);
     user.click(opeartionBtn);
     user.click(button0);
-    user.click(devider);
+    user.click(divider);
     user.click(button4);
     user.click(buttonExec);
     const answerBox = await container.findByTestId('calculator-answer');
@@ -158,11 +157,11 @@ describe('Calculator component', () => {
     const button6 = container.getByTestId('calculator-button-6');
     const button4 = container.getByTestId('calculator-button-4');
     const braketOpen = container.getByTestId('calculator-button-(');
-    const braketClose = container.getByTestId('calculator-button-)')
+    const braketClose = container.getByTestId('calculator-button-)');
     const buttonExec = container.getByTestId('calculator-button-=');
     const opeartionPlus = container.getByTestId('calculator-button-+');
     const opeartionMinus = container.getByTestId('calculator-button--');
-    
+
     user.click(button6);
     user.click(opeartionPlus);
     user.click(braketOpen);
@@ -184,11 +183,11 @@ describe('Calculator component', () => {
     const opeartionPlus = container.getByTestId('calculator-button-+');
     const opeartionMinus = container.getByTestId('calculator-button--');
     const opeartionMultipe = container.getByTestId('calculator-button-*');
-    
+
     user.click(button6);
     user.click(opeartionPlus);
     user.click(button6);
-    user.click(opeartionMultipe)
+    user.click(opeartionMultipe);
     user.click(button4);
     user.click(opeartionMinus);
     user.click(button4);
@@ -197,5 +196,4 @@ describe('Calculator component', () => {
     const answerBox = await container.findByTestId('calculator-answer');
     await waitFor(() => expect(answerBox.textContent).toBe('26'));
   });
-
 });

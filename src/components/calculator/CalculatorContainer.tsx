@@ -130,8 +130,8 @@ export const CalculatorContainer = () => {
       return;
     }
     const [button] = (buttonsLibrary as IButton[]).filter((btn) => btn.value === value);
-    if (button.type === 'number' || button.type === 'devider') {
-      if (lastButton && lastButton.type === 'devider' && button.type === 'devider') return;
+    if (button.type === 'number' || button.type === 'divider') {
+      if (lastButton && lastButton.type === 'divider' && button.type === 'divider') return;
       combineNumber(button.value);
       setOutputValue((prev) => `${prev}${button.value}`);
       setLastButton(button);

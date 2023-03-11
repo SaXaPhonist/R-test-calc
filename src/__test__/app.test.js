@@ -6,18 +6,17 @@ import { App } from '../app';
 
 describe('App component', () => {
   const initialApp = render(<App />);
- 
-it('App exist', () => {
+
+  it('App exist', () => {
     expect(initialApp).not.toBeNull();
   });
 
-it('App renders without crashing', () => {
-  render(<App />);
-  const main = document.getElementsByClassName('calculator-wrapper')[0]
-  main.setAttribute('data-testid', "calculator-wrapper");
-  const mainElement = screen.getByTestId('calculator-wrapper');
-  expect(mainElement).toHaveAttribute('data-testid');
-  main.removeAttribute('data-testid')
+  it('App renders without crashing', () => {
+    render(<App />);
+    const main = document.getElementsByClassName('calculator-wrapper')[0];
+    main.setAttribute('data-testid', 'calculator-wrapper');
+    const mainElement = screen.getByTestId('calculator-wrapper');
+    expect(mainElement).toHaveAttribute('data-testid');
+    main.removeAttribute('data-testid');
+  });
 });
-
-})
